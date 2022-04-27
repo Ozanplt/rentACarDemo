@@ -2,6 +2,7 @@ package com.etiya.rentACar.business.adapters;
 
 import com.etiya.rentACar.entities.CreditCard;
 import com.etiya.rentACar.payService.HalkBankPosManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,7 +10,6 @@ public class PaymentHalkBankAdapterManager {
 //implements ederek çalıştırabiliriz
 
     private HalkBankPosManager halkBankPosManager;
-
 
     public PaymentHalkBankAdapterManager(HalkBankPosManager halkBankPosManager ) {
         this.halkBankPosManager = halkBankPosManager;

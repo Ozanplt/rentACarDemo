@@ -61,10 +61,10 @@ public class AdditionalPropertyManager implements AdditionalPropertyService {
         return new SuccessResult(BusinessMessages.AdditionalPropertyMessage.ADDITIONAL_PROPERTY_DELETED);
     }
 
-    public ListAdditionalPropertyDto getById(int id){
+    public DataResult<ListAdditionalPropertyDto> getById(int id){
         AdditionalProperty response = this.additionalPropertyDao.getById(id);
         ListAdditionalPropertyDto result = this.modelMapperService.forDto().map(response, ListAdditionalPropertyDto.class);
-        return result;
+        return new SuccessDataResult<ListAdditionalPropertyDto>(result);
     }
 
     private void checkIfAdditionalPropertyExists(String name) {

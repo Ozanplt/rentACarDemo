@@ -28,6 +28,4 @@ public class OrderedAdditionalProperty {
 
     @OneToMany(mappedBy = "orderedAdditionalProperty")
     private List<Payment> payments;
-
-
 }

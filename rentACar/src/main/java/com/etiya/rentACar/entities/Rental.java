@@ -26,12 +26,20 @@ public class Rental {
     @Column(name="returnDate")
     private LocalDate returnDate;
 
-
-
     @ManyToOne
     @JoinColumn(name="customer_id")
     private Customer customer;
 
+    @Column(name="totalPrice")
+    private double totalPrice;
+
+
+    @Column(name="startKilometer")
+    private double startKilometer;
+
+
+    @Column(name="returnKilometer")
+    private double returnKilometer;
 
     @ManyToOne
     @JoinColumn(name="returnCityId",referencedColumnName = "id")
@@ -49,20 +57,8 @@ public class Rental {
     private List<Payment> payments;
 
 
-    @Column(name="totalPrice")
-    private double totalPrice;
-
     @ManyToOne
     @JoinColumn(name="car_id")
     private Car car;
-
-    @Column(name="startKilometer")
-    private double startKilometer;
-
-
-    @Column(name="returnKilometer")
-    private double returnKilometer;
-
-
 
 }

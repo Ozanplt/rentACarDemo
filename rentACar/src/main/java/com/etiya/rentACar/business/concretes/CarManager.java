@@ -44,7 +44,6 @@ public class CarManager implements CarService {
 
     @Override
     public Result add(CreateCarRequest createCarRequest) {
-//        checkDailyPrice(createCarRequest.getDailyPrice());
         Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
         this.carDao.save(car);
         return new SuccessResult(BusinessMessages.CarMessage.CAR_ADDED);
@@ -75,12 +74,6 @@ public class CarManager implements CarService {
         return new SuccessDataResult<List<ListCarDto>>(response);
     }
 
-    @Override
-    public CarDto getById(int id) {
-        Car car = this.carDao.getById(id);
-        CarDto response = this.modelMapperService.forDto().map(car, CarDto.class);
-        return response;
-    }
 
     public DataResult<CarDto> getByCarId(int id) {
         Car car = this.carDao.getById(id);
@@ -88,11 +81,6 @@ public class CarManager implements CarService {
         return new SuccessDataResult<CarDto>(response);
     }
 
-    public void updateCarStatusToAdd(int id) {
-        Car car = this.carDao.getById(id);
-        car.setCarState(CarStates.UnderMaintenance);
-        this.carDao.save(car);
-    }
 
     public DataResult<CarDto> updateCarStatus(UpdateCarStatusRequest updateCarStatusRequest) {
         Car car = this.carDao.getById(updateCarStatusRequest.getId());
@@ -134,16 +122,21 @@ public class CarManager implements CarService {
 
     }
 
-    public void checkIfCarAvailable(int id) {
+    public boolean checkIfCarAvailable(int id) {
         Car car = carDao.getById(id);
-        if(car.getCarState() != CarStates.Available) {
-            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_NOT_AVAILABLE);
+        if (car.getCarState()== CarStates.UnderMaintenance) {
+            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_UNDER_MAINTENANCE);
+        }
+        else if(car.getCarState()==CarStates.Rented){
+            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_RENTED);
+        }
+        else{
+            return false;
         }
     }
 
     @Override
     public DataResult<List<ListCarDto>> getByCityId(int id) {
-//        ListCityDto cities = this.cityService.getAllByCityId(id);
         List<Car> cars = this.carDao.getByCityId(id);
         List<ListCarDto> carResponse = cars.stream().map(item->this.modelMapperService.forDto().map(item,ListCarDto.class)).collect(Collectors.toList());
         return new SuccessDataResult<List<ListCarDto>>(carResponse);

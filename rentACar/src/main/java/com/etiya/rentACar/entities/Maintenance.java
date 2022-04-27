@@ -32,6 +32,4 @@ public class Maintenance {
     @JoinColumn(name = "car_id")
     private Car car;
 
-
-
 }

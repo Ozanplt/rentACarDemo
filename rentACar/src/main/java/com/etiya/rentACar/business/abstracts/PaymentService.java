@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PaymentService {
     Result add(CreatePaymentRequest createPaymentRequest);
-    DataResult<List<ListPaymentDto>> getALl();
+    DataResult<List<ListPaymentDto>> getAll();
 
 }

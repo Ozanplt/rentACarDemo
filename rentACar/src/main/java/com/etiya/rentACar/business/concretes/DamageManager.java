@@ -39,7 +39,7 @@ public class DamageManager implements DamageService {
 
     @Override
     public Result add(CreateDamageRequest createDamageRequest) {
-
+        checkIfCarExists(createDamageRequest.getCarId());
         Damage damage = this.modelMapperService.forRequest().map(createDamageRequest, Damage.class);
         this.damageDao.save(damage);
         return new SuccessResult(BusinessMessages.CarDamageMessage.DAMAGE_ADDED);
@@ -85,7 +85,7 @@ public class DamageManager implements DamageService {
     }
 
     private void checkIfCarExists(int carId) {
-        if (this.carService.getById(carId) == null) {
+        if (this.carService.getByCarId(carId).getData() == null) {
 
             throw new BusinessException(BusinessMessages.CarMessage.CAR_NOT_EXISTS);
         }

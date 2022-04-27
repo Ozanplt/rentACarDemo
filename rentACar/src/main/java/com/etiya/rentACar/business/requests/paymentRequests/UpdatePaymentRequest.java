@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +20,12 @@ public class UpdatePaymentRequest {
 
     private LocalDate returnDate;
 
+    @JsonIgnore
+    private double totalPrice;
+
+
+    //Kart bilgileri
+
     private String cardNumber;
 
     private String cardFirstName;
@@ -29,7 +36,7 @@ public class UpdatePaymentRequest {
 
     private String cvc;
 
-    private String customerFirstName; // deneme
+    private String customerFirstName;
 
     private String customerLastName;
 
@@ -38,4 +45,16 @@ public class UpdatePaymentRequest {
     private int returnCityId;
 
     private int rentCityId;
+
+    private double returnKilometer;
+
+    @JsonIgnore
+    private int invoiceId;
+
+    @JsonIgnore
+    private int rentalId;
+
+    private List<Integer> orderedAdditionalPropertyIdentities;
+
+    private double discountRate;
 }

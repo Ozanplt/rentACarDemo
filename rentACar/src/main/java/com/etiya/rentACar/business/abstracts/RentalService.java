@@ -21,5 +21,5 @@ public interface RentalService {
     DataResult<RentalDto> getById(int id);
     DataResult<RentalDto> getByLastRental(int id);
 
-    double setDiscountedPrice(int carId);///
+    double setDiscountedPrice(int carId, double discountRate);///
 }

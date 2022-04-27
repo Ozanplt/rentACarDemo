@@ -45,10 +45,10 @@ public class OrderedAdditionalPropertyManager implements OrderedAdditionalProper
         return new SuccessDataResult<List<ListOrderedAdditionalPropertyDto>>(response);
     }
 
-    public ListOrderedAdditionalPropertyDto getById(int id){
+    public DataResult<ListOrderedAdditionalPropertyDto> getById(int id){
         OrderedAdditionalProperty response = this.orderedAdditionalPropertyDao.getById(id);
         ListOrderedAdditionalPropertyDto result = this.modelMapperService.forDto().map(response, ListOrderedAdditionalPropertyDto.class);
-        return result;
+        return new SuccessDataResult<ListOrderedAdditionalPropertyDto>(result);
     }
 
     public List<ListOrderedAdditionalPropertyDto> getAllIdById(int id){
@@ -56,7 +56,6 @@ public class OrderedAdditionalPropertyManager implements OrderedAdditionalProper
         List<ListOrderedAdditionalPropertyDto> result = response.stream()
                 .map(order -> this.modelMapperService.forDto().map(order, ListOrderedAdditionalPropertyDto.class))
                 .collect(Collectors.toList());
-
         return result;
     }
 }

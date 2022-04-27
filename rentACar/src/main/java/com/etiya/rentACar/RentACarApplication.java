@@ -50,8 +50,6 @@ public class RentACarApplication {
 		return errorResults;
 	}
 
-	//genel olarak exception yaz
-
 	@Bean
 	public IsBankPosManager getIsbankPostManager(){
 		return new IsBankPosManager();

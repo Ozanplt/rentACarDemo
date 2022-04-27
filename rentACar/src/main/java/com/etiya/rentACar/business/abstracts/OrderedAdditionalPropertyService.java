@@ -5,6 +5,7 @@ import com.etiya.rentACar.business.responses.orderedAdditionalPropertyResponses.
 import com.etiya.rentACar.core.utilities.results.DataResult;
 import com.etiya.rentACar.core.utilities.results.Result;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 
@@ -12,6 +13,6 @@ import java.util.List;
 public interface OrderedAdditionalPropertyService {
     Result add(CreateOrderedAdditionalPropertyRequest createOrderedAdditionalPropertyRequest);
     DataResult<List<ListOrderedAdditionalPropertyDto>> getAll();
-    ListOrderedAdditionalPropertyDto getById(int id);
+    DataResult<ListOrderedAdditionalPropertyDto> getById(int id);
     List<ListOrderedAdditionalPropertyDto> getAllIdById(int id);
 }

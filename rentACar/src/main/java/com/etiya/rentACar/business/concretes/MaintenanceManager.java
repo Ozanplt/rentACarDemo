@@ -1,6 +1,7 @@
 package com.etiya.rentACar.business.concretes;
 
 import com.etiya.rentACar.business.constants.messages.BusinessMessages;
+import com.etiya.rentACar.business.requests.carRequests.UpdateCarStatusRequest;
 import com.etiya.rentACar.business.responses.carResponses.CarDto;
 import com.etiya.rentACar.core.utilities.results.DataResult;
 import com.etiya.rentACar.core.utilities.results.Result;
@@ -45,7 +46,8 @@ public class MaintenanceManager implements MaintenanceService {
         checkCarStatus(createMaintenanceRequest.getReturnDate(), createMaintenanceRequest.getAddDate(), createMaintenanceRequest.getCarId());
         Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
         this.maintenanceDao.save(maintenance);
-        carService.updateCarStatusToAdd(createMaintenanceRequest.getCarId());
+        UpdateCarStatusRequest updateCarStatusRequest = new UpdateCarStatusRequest(createMaintenanceRequest.getCarId(), CarStates.UnderMaintenance);
+        carService.updateCarStatus(updateCarStatusRequest);
         return new SuccessResult(BusinessMessages.MaintenanceMessages.MAINTENANCE_ADDED);
     }
 
@@ -80,18 +82,6 @@ public class MaintenanceManager implements MaintenanceService {
         return new SuccessDataResult<List<ListMaintenanceDto>>(response);
     }
 
-    public boolean checkIfCarInMaintenance(int carId) {
-        CarDto car = this.carService.getById(carId);
-        if (car.getCarState()== CarStates.UnderMaintenance) {
-            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_UNDER_MAINTENANCE);
-        }
-        else if(car.getCarState()==CarStates.Rented){
-            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_RENTED);
-        }
-        else{
-            return false;
-        }
-    }
 
     public void checkMaintenanceDate(LocalDate returnDate, LocalDate addDate){
         if (returnDate.isBefore(addDate)) {
@@ -100,7 +90,7 @@ public class MaintenanceManager implements MaintenanceService {
     }
 
     public void checkCarStatus(LocalDate returnDate,LocalDate addDate, int carId){
-        if (!checkIfCarInMaintenance(carId)) {
+        if (!carService.checkIfCarAvailable(carId)) {
             checkMaintenanceDate(returnDate,addDate);
         }
     }

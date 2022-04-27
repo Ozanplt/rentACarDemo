@@ -1,32 +1,27 @@
 package com.etiya.rentACar.business.concretes;
 
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.etiya.rentACar.business.abstracts.*;
 import com.etiya.rentACar.business.constants.messages.BusinessMessages;
 import com.etiya.rentACar.business.requests.carRequests.UpdateCarStatusRequest;
-import com.etiya.rentACar.business.requests.rentalRequests.*;
-import com.etiya.rentACar.business.responses.additionalPropertyResponses.ListAdditionalPropertyDto;
+import com.etiya.rentACar.business.requests.rentalRequests.CreateRentalRequest;
+import com.etiya.rentACar.business.requests.rentalRequests.DeleteRentalRequest;
+import com.etiya.rentACar.business.requests.rentalRequests.UpdateRentalRequest;
+import com.etiya.rentACar.business.requests.rentalRequests.UpdateReturnDateRequest;
 import com.etiya.rentACar.business.responses.carResponses.CarDto;
-import com.etiya.rentACar.business.responses.customerResponses.CustomerDto;
-import com.etiya.rentACar.business.responses.invoiceResponses.InvoiceDto;
-import com.etiya.rentACar.business.responses.orderedAdditionalPropertyResponses.ListOrderedAdditionalPropertyDto;
-import com.etiya.rentACar.business.responses.rentalResponses.RentalDto;
-import com.etiya.rentACar.entities.CarStates;
-import com.etiya.rentACar.entities.Customer;
-import org.springframework.stereotype.Service;
-
 import com.etiya.rentACar.business.responses.rentalResponses.ListRentalDto;
+import com.etiya.rentACar.business.responses.rentalResponses.RentalDto;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.core.utilities.results.DataResult;
 import com.etiya.rentACar.core.utilities.results.Result;
 import com.etiya.rentACar.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACar.core.utilities.results.SuccessResult;
 import com.etiya.rentACar.dataAccess.abstracts.RentalDao;
+import com.etiya.rentACar.entities.CarStates;
 import com.etiya.rentACar.entities.Rental;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalManager implements RentalService {
@@ -55,14 +50,15 @@ public class RentalManager implements RentalService {
 
         this.rentalDao.save(rental);
 
-//        updateKilometer(createRentalRequest);
-//        lastKilometer(createRentalRequest);
+
+        lastKilometer(createRentalRequest);
+
         updateCarStatusAsRented(createRentalRequest);
+
+
+
         return new SuccessDataResult<Rental>(rental,BusinessMessages.RentalMessage.RENTAL_ADDED);
     }
-
-    //return kilometer rental addde null girilmelidir.update'de doğru değer girilebilir.
-    //orderaddtional service ayrıca alınmalı
 
 
     @Override
@@ -85,7 +81,6 @@ public class RentalManager implements RentalService {
 
     @Override
     public Result update(UpdateRentalRequest updateRentalRequest) {
-//        CreateRentalRequest createRentalRequest = this.modelMapperService.forRequest().map(updateRentalRequest, CreateRentalRequest.class);
         Rental rental = this.modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
         this.rentalDao.save(rental);
         return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_UPDATED);
@@ -97,16 +92,12 @@ public class RentalManager implements RentalService {
         return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_DELETED);
     }
 
-
-
     public void updateCarStatusAsRented(CreateRentalRequest createRentalRequest) {
         UpdateCarStatusRequest updateCarStatusRequest = new UpdateCarStatusRequest();
         updateCarStatusRequest.setId(createRentalRequest.getCarId());
         updateCarStatusRequest.setStatus(CarStates.Rented);
         carService.updateCarStatus(updateCarStatusRequest);
-
     }
-
 
     public DataResult<RentalDto> getById(int id){
         Rental rental = this.rentalDao.getById(id);
@@ -114,18 +105,10 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<RentalDto>(rentalDto);
     }
 
-//    public void updateKilometer(CreateRentalRequest createRentalRequest) {
-//        CarDto carDto = this.carService.getCarKilometer(createRentalRequest.getCarId());
-//        Rental rental = this.rentalDao.getByCarId(createRentalRequest.getCarId());
-//        rental.setStartKilometer(carDto.getCarKilometer());
-//
-//    }
-//
-//    public Result lastKilometer(CreateRentalRequest createRentalRequest) {
-//        this.carService.setCarKilometer(createRentalRequest);
-//        return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_UPDATED);
-//    }
-
+    public Result lastKilometer(CreateRentalRequest createRentalRequest) {
+        this.carService.setCarKilometer(createRentalRequest);
+        return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_UPDATED);
+    }
     @Override
     public DataResult<RentalDto> getByLastRental(int id) {
         Rental rental = this.rentalDao.getRentalById(id);
@@ -133,12 +116,8 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<RentalDto>(rentalDto);
     }
 
-    //for dailydiscountedprice
-    public double setDiscountedPrice(int carId){
-        double discountRate = 0.5;
-        Rental rental = this.rentalDao.getById(carId);
-        CarDto carDto = this.carService.getById(carId);
-        rental.setTotalPrice(carDto.getDailyPrice()*discountRate);
+    public double setDiscountedPrice(int carId,double discountRate){
+        CarDto carDto = this.carService.getByCarId(carId).getData();
         return carDto.getDailyPrice()*discountRate;
     }
 }

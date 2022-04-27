@@ -4,7 +4,9 @@ import com.etiya.rentACar.entities.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.modelmapper.internal.bytebuddy.build.ToStringPlugin;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -41,7 +43,7 @@ public class CreatePaymentRequest {
 
     private String cvc;
 
-    private String customerFirstName; // deneme
+    private String customerFirstName;
 
     private String customerLastName;
 
@@ -60,4 +62,6 @@ public class CreatePaymentRequest {
     private int rentalId;
 
     private List<Integer> orderedAdditionalPropertyIdentities;
+
+    private double discountRate;
 }

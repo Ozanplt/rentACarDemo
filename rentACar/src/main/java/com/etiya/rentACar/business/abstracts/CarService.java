@@ -26,8 +26,6 @@ public interface CarService {
 
     DataResult<CarDto> updateCarStatus(UpdateCarStatusRequest updateCarStatusRequest);
 
-    CarDto getById(int id);
-
     DataResult<CarDto> getByCarId(int id);
 
     Result add(CreateCarRequest createCarRequest);
@@ -36,9 +34,9 @@ public interface CarService {
 
     Result delete(DeleteCarRequest deleteCarRequest);
 
-    void updateCarStatusToAdd(int id);
+//    void updateCarStatusToAdd(int id);
 
-    void checkIfCarAvailable(int id);
+    boolean checkIfCarAvailable(int id);
 
     DataResult<List<ListCarDto>> getByCityId(int id);
 

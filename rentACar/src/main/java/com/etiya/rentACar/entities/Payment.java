@@ -43,6 +43,9 @@ public class Payment {
     @Column(name = "cvc")
     private String cvc;
 
+    @Column(name = "dayCount")
+    private int dayCount;
+
     @ManyToOne
     @JoinColumn(name="car_id")
     private Car car;
@@ -72,7 +75,5 @@ public class Payment {
     @JoinColumn(name="rental_id")
     private Rental rental;
 
-    @Column(name = "dayCount")
-    private int dayCount;
 
 }

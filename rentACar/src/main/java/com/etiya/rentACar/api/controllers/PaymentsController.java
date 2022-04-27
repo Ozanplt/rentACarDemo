@@ -26,7 +26,7 @@ public class PaymentsController {
     }
     @GetMapping("/getall")
     public DataResult<List<ListPaymentDto>> getAll() {
-        return this.paymentService.getALl();
+        return this.paymentService.getAll();
     }
 
 }
