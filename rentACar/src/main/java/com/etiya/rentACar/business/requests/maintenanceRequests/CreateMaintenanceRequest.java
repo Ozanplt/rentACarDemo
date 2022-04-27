@@ -24,7 +24,6 @@ public class CreateMaintenanceRequest {
     @FutureOrPresent
     private LocalDate addDate;
 
-
     @NotNull
     private int carId;
 

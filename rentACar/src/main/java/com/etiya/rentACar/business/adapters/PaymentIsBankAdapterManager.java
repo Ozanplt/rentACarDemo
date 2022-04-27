@@ -5,6 +5,7 @@ import com.etiya.rentACar.payService.IsBankPosManager;
 import org.springframework.stereotype.Service;
 
 @Service
+
 public class PaymentIsBankAdapterManager implements PaymentBankAdapterService {
 
 

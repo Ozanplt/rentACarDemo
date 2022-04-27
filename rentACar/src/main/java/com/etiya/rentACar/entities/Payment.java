@@ -12,20 +12,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="payments")
+@Table(name = "payments")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="rentDate")
+    @Column(name = "rentDate")
     private LocalDate rentDate;
 
-    @Column(name="returnDate")
+    @Column(name = "returnDate")
     private LocalDate returnDate;
 
-    @Column(name="totalPrice")
+    @Column(name = "totalPrice")
     private double totalPrice;
 
     @Column(name = "cardNumber")
@@ -47,32 +47,31 @@ public class Payment {
     private int dayCount;
 
     @ManyToOne
-    @JoinColumn(name="car_id")
+    @JoinColumn(name = "car_id")
     private Car car;
 
     @ManyToOne
-    @JoinColumn(name="OrderedAdditionalProperty_id")
+    @JoinColumn(name = "OrderedAdditionalProperty_id")
     private OrderedAdditionalProperty orderedAdditionalProperty;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-
     @ManyToOne
-    @JoinColumn(name="returnCityId",referencedColumnName = "id")
+    @JoinColumn(name = "returnCityId", referencedColumnName = "id")
     private City returnCity;
 
     @ManyToOne
-    @JoinColumn(name="rentCityId",referencedColumnName = "id")
+    @JoinColumn(name = "rentCityId", referencedColumnName = "id")
     private City rentCity;
 
     @ManyToOne//OnetoOne olmalı mı?
-    @JoinColumn(name="invoice_id")
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
     @ManyToOne
-    @JoinColumn(name="rental_id")
+    @JoinColumn(name = "rental_id")
     private Rental rental;
 
 

@@ -11,31 +11,31 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="cars")
+@Table(name = "cars")
 public class Car {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    @Column(name="dailyPrice")
+    @Column(name = "dailyPrice")
     private double dailyPrice;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name="modelYear")
+    @Column(name = "modelYear")
     private double modelYear;
 
     @ManyToOne
-    @JoinColumn(name="color_id")
+    @JoinColumn(name = "color_id")
     private Color color;
 
-    @Column(name="carState")
+    @Column(name = "carState")
     private CarStates carState;
 
     @ManyToOne
-    @JoinColumn(name="brand_id")
+    @JoinColumn(name = "brand_id")
     private Brand brand;
 
     @OneToMany(mappedBy = "car")
@@ -44,20 +44,19 @@ public class Car {
     @OneToMany(mappedBy = "car")
     private List<Maintenance> maintenances;
 
-
     @ManyToOne
-    @JoinColumn(name="city_id")
+    @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
 
     @OneToMany(mappedBy = "car")
     private List<Rental> rentals;
 
-    @Column(name="carKilometer")
+    @Column(name = "carKilometer")
     private double carKilometer;
 
     @OneToMany(mappedBy = "car")

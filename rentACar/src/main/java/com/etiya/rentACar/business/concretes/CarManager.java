@@ -38,8 +38,6 @@ public class CarManager implements CarService {
     public CarManager(CarDao carDao, ModelMapperService modelMapperService) {
         this.carDao = carDao;
         this.modelMapperService = modelMapperService;
-
-
     }
 
     @Override
@@ -64,6 +62,13 @@ public class CarManager implements CarService {
         return new SuccessResult(BusinessMessages.CarMessage.CAR_DELETED);
     }
 
+    public DataResult<CarDto> updateCarStatus(UpdateCarStatusRequest updateCarStatusRequest) {
+        Car car = this.carDao.getById(updateCarStatusRequest.getId());
+        car.setCarState(updateCarStatusRequest.getStatus());
+        this.carDao.save(car);
+        CarDto carDto = this.modelMapperService.forDto().map(car, CarDto.class);
+        return new SuccessDataResult<CarDto>(carDto);
+    }
 
     @Override
     public DataResult<List<ListCarDto>> getAll() {
@@ -80,16 +85,6 @@ public class CarManager implements CarService {
         CarDto response = this.modelMapperService.forDto().map(car, CarDto.class);
         return new SuccessDataResult<CarDto>(response);
     }
-
-
-    public DataResult<CarDto> updateCarStatus(UpdateCarStatusRequest updateCarStatusRequest) {
-        Car car = this.carDao.getById(updateCarStatusRequest.getId());
-        car.setCarState(updateCarStatusRequest.getStatus());
-        this.carDao.save(car);
-        CarDto carDto = this.modelMapperService.forDto().map(car, CarDto.class);
-        return new SuccessDataResult<CarDto>(carDto);
-    }
-
 
     @Override
     public DataResult<List<ListCarDto>> getAllByModelYear(double modelYear) {
@@ -122,19 +117,6 @@ public class CarManager implements CarService {
 
     }
 
-    public boolean checkIfCarAvailable(int id) {
-        Car car = carDao.getById(id);
-        if (car.getCarState()== CarStates.UnderMaintenance) {
-            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_UNDER_MAINTENANCE);
-        }
-        else if(car.getCarState()==CarStates.Rented){
-            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_RENTED);
-        }
-        else{
-            return false;
-        }
-    }
-
     @Override
     public DataResult<List<ListCarDto>> getByCityId(int id) {
         List<Car> cars = this.carDao.getByCityId(id);
@@ -153,5 +135,18 @@ public class CarManager implements CarService {
     public void setCarKilometer(CreateRentalRequest createRentalRequest) {
         Car car=this.carDao.getById(createRentalRequest.getCarId());
         car.setCarKilometer(createRentalRequest.getReturnKilometer());
+    }
+
+    public boolean checkIfCarAvailable(int id) {
+        Car car = carDao.getById(id);
+        if (car.getCarState()== CarStates.UnderMaintenance) {
+            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_UNDER_MAINTENANCE);
+        }
+        else if(car.getCarState()==CarStates.Rented){
+            throw new BusinessException(BusinessMessages.CarStateMessage.CAR_STATE_RENTED);
+        }
+        else{
+            return false;
+        }
     }
 }

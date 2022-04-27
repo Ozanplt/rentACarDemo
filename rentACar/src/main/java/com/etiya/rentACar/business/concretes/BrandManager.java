@@ -65,7 +65,7 @@ public class BrandManager implements BrandService {
         return new SuccessDataResult<List<ListBrandDto>>(response);
     }
 
-    public void checkIfBrandExists(String brandName){
+    private void checkIfBrandExists(String brandName){
         if (brandDao.existsBrandByNameIgnoreCase(brandName)) {
             throw new BusinessException(BusinessMessages.BrandMessage.BRAND_NAME_EXISTS);
         }

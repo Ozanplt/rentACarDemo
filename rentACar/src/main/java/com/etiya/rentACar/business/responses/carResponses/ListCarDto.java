@@ -1,11 +1,10 @@
 package com.etiya.rentACar.business.responses.carResponses;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.etiya.rentACar.entities.CarStates;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.etiya.rentACar.entities.CarStates;
 
 import java.time.LocalDate;
 

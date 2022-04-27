@@ -22,6 +22,4 @@ public interface DamageService {
     Result add(CreateDamageRequest createDamageRequest);
     Result delete(DeleteDamageRequest deleteDamageRequest);
     Result update(UpdateDamageRequest updateDamageRequest);
-
-
 }

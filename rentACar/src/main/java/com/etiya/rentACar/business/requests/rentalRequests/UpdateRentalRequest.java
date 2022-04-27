@@ -25,9 +25,8 @@ public class UpdateRentalRequest {
     private int customerId;
     @NotNull
     private int rentCityId;
-
     private int returnCityId;
     private double startKilometer;
-    private double returnKilometer;;
+    private double returnKilometer;
 
 }

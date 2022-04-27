@@ -60,25 +60,6 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<Rental>(rental,BusinessMessages.RentalMessage.RENTAL_ADDED);
     }
 
-
-    @Override
-    public DataResult<List<ListRentalDto>> getAll() {
-
-        List<Rental> rentals = this.rentalDao.findAll();
-        List<ListRentalDto> response = rentals.stream()
-                .map(car -> this.modelMapperService.forDto().map(car, ListRentalDto.class))
-                .collect(Collectors.toList());
-        return new SuccessDataResult<List<ListRentalDto>>(response);
-    }
-
-    public Result updateRentalReturnDate(UpdateReturnDateRequest updateReturnDateRequest) {
-
-        Rental rental = this.rentalDao.getByCarId(updateReturnDateRequest.getCarId());
-        rental.setReturnDate(updateReturnDateRequest.getReturnDate());
-        rentalDao.save(rental);
-        return new SuccessResult("Rental Return Date Updated");
-    }
-
     @Override
     public Result update(UpdateRentalRequest updateRentalRequest) {
         Rental rental = this.modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
@@ -92,11 +73,14 @@ public class RentalManager implements RentalService {
         return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_DELETED);
     }
 
-    public void updateCarStatusAsRented(CreateRentalRequest createRentalRequest) {
-        UpdateCarStatusRequest updateCarStatusRequest = new UpdateCarStatusRequest();
-        updateCarStatusRequest.setId(createRentalRequest.getCarId());
-        updateCarStatusRequest.setStatus(CarStates.Rented);
-        carService.updateCarStatus(updateCarStatusRequest);
+    @Override
+    public DataResult<List<ListRentalDto>> getAll() {
+
+        List<Rental> rentals = this.rentalDao.findAll();
+        List<ListRentalDto> response = rentals.stream()
+                .map(car -> this.modelMapperService.forDto().map(car, ListRentalDto.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<List<ListRentalDto>>(response);
     }
 
     public DataResult<RentalDto> getById(int id){
@@ -105,7 +89,7 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<RentalDto>(rentalDto);
     }
 
-    public Result lastKilometer(CreateRentalRequest createRentalRequest) {
+    private Result lastKilometer(CreateRentalRequest createRentalRequest) {
         this.carService.setCarKilometer(createRentalRequest);
         return new SuccessResult(BusinessMessages.RentalMessage.RENTAL_UPDATED);
     }
@@ -114,6 +98,21 @@ public class RentalManager implements RentalService {
         Rental rental = this.rentalDao.getRentalById(id);
         RentalDto rentalDto = this.modelMapperService.forDto().map(rental, RentalDto.class);
         return new SuccessDataResult<RentalDto>(rentalDto);
+    }
+
+    public Result updateRentalReturnDate(UpdateReturnDateRequest updateReturnDateRequest) {
+
+        Rental rental = this.rentalDao.getByCarId(updateReturnDateRequest.getCarId());
+        rental.setReturnDate(updateReturnDateRequest.getReturnDate());
+        rentalDao.save(rental);
+        return new SuccessResult("Rental Return Date Updated");
+    }
+
+    private void updateCarStatusAsRented(CreateRentalRequest createRentalRequest) {
+        UpdateCarStatusRequest updateCarStatusRequest = new UpdateCarStatusRequest();
+        updateCarStatusRequest.setId(createRentalRequest.getCarId());
+        updateCarStatusRequest.setStatus(CarStates.Rented);
+        carService.updateCarStatus(updateCarStatusRequest);
     }
 
     public double setDiscountedPrice(int carId,double discountRate){

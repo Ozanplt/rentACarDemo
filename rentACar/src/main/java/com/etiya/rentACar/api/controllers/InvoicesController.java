@@ -46,17 +46,18 @@ public class InvoicesController {
     }
 
     @GetMapping("/getallcreatedate")
-    public DataResult<List<ListInvoiceDto>> getAllCreateDate(@RequestParam("firstcreatedate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate firstDate,
-                                                             @RequestParam("endcreatedate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)LocalDate endDate){
-    return this.invoiceService.getByCreateDateBetween(firstDate,endDate);
-
+    public DataResult<List<ListInvoiceDto>> getAllCreateDate(@RequestParam("firstcreatedate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate firstDate,
+                                                             @RequestParam("endcreatedate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return this.invoiceService.getByCreateDateBetween(firstDate, endDate);
     }
+
     @GetMapping("/getallcustomerid")
-    public DataResult<List<ListInvoiceDto>> getAllCustomerId(@RequestParam("customerid") int customerId){
+    public DataResult<List<ListInvoiceDto>> getAllCustomerId(@RequestParam("customerid") int customerId) {
         return this.invoiceService.getByCustomerId(customerId);
     }
+
     @GetMapping("/getbyid")
-    public DataResult<InvoiceDto> getById(@RequestParam("id") int id){
+    public DataResult<InvoiceDto> getById(@RequestParam("id") int id) {
         return this.invoiceService.getById(id);
     }
 

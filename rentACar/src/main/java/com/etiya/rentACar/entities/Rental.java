@@ -12,53 +12,53 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="rentals")
+@Table(name = "rentals")
 @Entity
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="rentDate")
+    @Column(name = "rentDate")
     private LocalDate rentDate;
 
-    @Column(name="returnDate")
+    @Column(name = "returnDate")
     private LocalDate returnDate;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Column(name="totalPrice")
+    @Column(name = "totalPrice")
     private double totalPrice;
 
 
-    @Column(name="startKilometer")
+    @Column(name = "startKilometer")
     private double startKilometer;
 
 
-    @Column(name="returnKilometer")
+    @Column(name = "returnKilometer")
     private double returnKilometer;
 
     @ManyToOne
-    @JoinColumn(name="returnCityId",referencedColumnName = "id")
+    @JoinColumn(name = "returnCityId", referencedColumnName = "id")
     private City returnCity;
 
     @ManyToOne
-    @JoinColumn(name="rentCityId",referencedColumnName = "id")
+    @JoinColumn(name = "rentCityId", referencedColumnName = "id")
     private City rentCity;
 
 
-    @OneToMany(mappedBy="rental")
+    @OneToMany(mappedBy = "rental")
     private List<Invoice> invoices;
 
-    @OneToMany(mappedBy="rental")
+    @OneToMany(mappedBy = "rental")
     private List<Payment> payments;
 
 
     @ManyToOne
-    @JoinColumn(name="car_id")
+    @JoinColumn(name = "car_id")
     private Car car;
 
 }

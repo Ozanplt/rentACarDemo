@@ -28,7 +28,7 @@ public class CreateInvoiceRequest {
     private double totalPricePayment;
 
     private String billNo;
-@JsonIgnore
+    @JsonIgnore
     private int rentalDay;
 
 }

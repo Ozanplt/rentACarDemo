@@ -28,19 +28,17 @@ public interface CarService {
 
     DataResult<CarDto> getByCarId(int id);
 
+    DataResult<List<ListCarDto>> getByCityId(int id);
+
+    CarDto getCarKilometer(int id);
+
     Result add(CreateCarRequest createCarRequest);
 
     Result update(UpdateCarRequest updateCarRequest);
 
     Result delete(DeleteCarRequest deleteCarRequest);
 
-//    void updateCarStatusToAdd(int id);
-
     boolean checkIfCarAvailable(int id);
-
-    DataResult<List<ListCarDto>> getByCityId(int id);
-
-    CarDto getCarKilometer(int id);
 
     void setCarKilometer(CreateRentalRequest createRentalRequest);
 

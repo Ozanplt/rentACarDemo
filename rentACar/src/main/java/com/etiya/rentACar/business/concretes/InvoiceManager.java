@@ -7,7 +7,6 @@ import com.etiya.rentACar.business.requests.invoiceRequests.DeleteInvoiceRequest
 import com.etiya.rentACar.business.requests.invoiceRequests.UpdateInvoiceRequest;
 import com.etiya.rentACar.business.responses.invoiceResponses.InvoiceDto;
 import com.etiya.rentACar.business.responses.invoiceResponses.ListInvoiceDto;
-import com.etiya.rentACar.business.responses.rentalResponses.RentalDto;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.core.utilities.results.DataResult;
 import com.etiya.rentACar.core.utilities.results.Result;
@@ -15,7 +14,6 @@ import com.etiya.rentACar.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACar.core.utilities.results.SuccessResult;
 import com.etiya.rentACar.dataAccess.abstracts.InvoiceDao;
 import com.etiya.rentACar.entities.Invoice;
-import com.etiya.rentACar.entities.Rental;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

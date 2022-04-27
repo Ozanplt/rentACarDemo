@@ -36,34 +36,26 @@ public class DamagesController {
 
     @GetMapping("/get/getallpaged")
     public DataResult<List<ListDamageDto>> getAllPaged(@RequestParam int pageNo, @RequestParam int pageSize) {
-
         return this.damageService.getAllPaged(pageNo, pageSize);
-
     }
 
     @GetMapping("/get/getallsorted")
     public DataResult<List<ListDamageDto>> getAllSorted(@RequestParam String field, @RequestParam String option) {
-
         return this.damageService.getAllSorted(field, option);
-
     }
 
     @PostMapping("/add")
     public Result add(@RequestBody @Valid CreateDamageRequest createDamageRequest) {
-
         return this.damageService.add(createDamageRequest);
     }
-
 
     @PutMapping("/update")
     public Result update(@RequestBody @Valid UpdateDamageRequest updateDamageRequest) {
         return this.damageService.update(updateDamageRequest);
     }
 
-
     @DeleteMapping("/delete")
     public Result delete(@RequestBody @Valid DeleteDamageRequest deleteDamageRequest) {
         return this.damageService.delete(deleteDamageRequest);
     }
-
 }

@@ -26,8 +26,7 @@ public class Invoice {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-
-    @Column(name="billNo")
+    @Column(name = "billNo")
     private String billNo;
 
     @ManyToOne
@@ -40,9 +39,8 @@ public class Invoice {
     @Column(name = "returnDate")
     private LocalDate returnDate;
 
-    @Column(name="totalPricePayment")
+    @Column(name = "totalPricePayment")
     private double totalPricePayment;
-
 
     @Column(name = "rentalDay")
     private int rentalDay;

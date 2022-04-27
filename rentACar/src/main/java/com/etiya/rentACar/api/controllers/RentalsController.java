@@ -40,7 +40,7 @@ public class RentalsController {
     }
 
     @PutMapping("/updatereturndate")
-    public Result updateRentalReturnDate(@RequestBody UpdateReturnDateRequest updateReturnDateRequest){
+    public Result updateRentalReturnDate(@RequestBody UpdateReturnDateRequest updateReturnDateRequest) {
 
         return this.rentalService.updateRentalReturnDate(updateReturnDateRequest);
     }

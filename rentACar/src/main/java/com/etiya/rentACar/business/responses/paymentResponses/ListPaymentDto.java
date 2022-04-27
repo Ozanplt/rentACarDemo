@@ -1,6 +1,5 @@
 package com.etiya.rentACar.business.responses.paymentResponses;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,7 @@ public class ListPaymentDto {
 
     private String cvc;
 
-    private String customerFirstName; // deneme
+    private String customerFirstName;
 
     private String customerLastName;
 
@@ -50,7 +49,4 @@ public class ListPaymentDto {
 
     private double rentalDailyDiscountedTotalPrice;
 
-//    private String orderedAdditionalPropertyName;
-//
-//    private double orderedAdditionalPropertyDailyPrice;
 }

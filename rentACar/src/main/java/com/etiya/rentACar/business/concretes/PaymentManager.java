@@ -7,16 +7,12 @@ import com.etiya.rentACar.business.requests.customerRequests.CreateCustomerReque
 import com.etiya.rentACar.business.requests.invoiceRequests.CreateInvoiceRequest;
 import com.etiya.rentACar.business.requests.orderedAdditionalPropertyRequests.CreateOrderedAdditionalPropertyRequest;
 import com.etiya.rentACar.business.requests.paymentRequests.CreatePaymentRequest;
-import com.etiya.rentACar.business.requests.paymentRequests.DeletePaymentRequest;
-import com.etiya.rentACar.business.requests.paymentRequests.UpdatePaymentRequest;
 import com.etiya.rentACar.business.requests.rentalRequests.CreateRentalRequest;
-import com.etiya.rentACar.business.responses.additionalPropertyResponses.AdditionalPropertyDto;
 import com.etiya.rentACar.business.responses.additionalPropertyResponses.ListAdditionalPropertyDto;
 import com.etiya.rentACar.business.responses.carResponses.CarDto;
 import com.etiya.rentACar.business.responses.cityResponses.CityDto;
 import com.etiya.rentACar.business.responses.customerResponses.CustomerDto;
 import com.etiya.rentACar.business.responses.invoiceResponses.InvoiceDto;
-import com.etiya.rentACar.business.responses.orderedAdditionalPropertyResponses.ListOrderedAdditionalPropertyDto;
 import com.etiya.rentACar.business.responses.paymentResponses.ListPaymentDto;
 import com.etiya.rentACar.business.responses.rentalResponses.RentalDto;
 import com.etiya.rentACar.core.crossCuttingConcerns.exceptionHandling.BusinessException;
@@ -98,31 +94,31 @@ public class PaymentManager implements PaymentService {
     }
 
 
-    public double addTotalPrice(CreatePaymentRequest createPaymentRequest) {
+    private double addTotalPrice(CreatePaymentRequest createPaymentRequest) {
 
         DataResult<RentalDto> rentalDto = this.rentalService.getById(createPaymentRequest.getCarId());
-        int dayDiff = diffDates(createPaymentRequest);
+        int dayDiff = differenceRentDateAndReturnDate(createPaymentRequest);
         double carTotalPrice = dayDiff * rentalDto.getData().getTotalPrice();
         double additionalPropertyTotalPrice = dayDiff * additionalPropertyTotal(createPaymentRequest);
-        double cityDiff = checkCity(createPaymentRequest);
+        double cityDiff = checkCitySimilarityById(createPaymentRequest);
         return (carTotalPrice + cityDiff + additionalPropertyTotalPrice);
 
     }
 
-    public DataResult<Customer> newCustomerForPayment(CreatePaymentRequest createPaymentRequest) {
+    private DataResult<Customer> newCustomerForPayment(CreatePaymentRequest createPaymentRequest) {
         CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest();
         createCustomerRequest.setFirstName(createPaymentRequest.getCustomerFirstName());
         createCustomerRequest.setLastName(createPaymentRequest.getCustomerLastName());
         return new SuccessDataResult<Customer>(this.customerService.add(createCustomerRequest).getData());
     }
 
-    public DataResult<Rental> newRentalForPayment(CreatePaymentRequest createPaymentRequest, Customer customer) {
+    private DataResult<Rental> newRentalForPayment(CreatePaymentRequest createPaymentRequest, Customer customer) {
         CreateRentalRequest createRentalRequest = new CreateRentalRequest();
         createRentalRequest.setReturnDate(createPaymentRequest.getReturnDate());
         createRentalRequest.setRentDate(createPaymentRequest.getRentDate());
         createRentalRequest.setCustomerId(customer.getId());
         createRentalRequest.setCarId(createPaymentRequest.getCarId());
-        createRentalRequest.setStartKilometer(updateKilometer(createPaymentRequest.getCarId()));
+        createRentalRequest.setStartKilometer(updateCarKilometer(createPaymentRequest.getCarId()));
         createRentalRequest.setRentCityId(createPaymentRequest.getRentCityId());
         createRentalRequest.setReturnCityId(createPaymentRequest.getReturnCityId());
         createRentalRequest.setTotalPrice(this.rentalService.setDiscountedPrice(createPaymentRequest.getCarId(), createPaymentRequest.getDiscountRate()));
@@ -130,7 +126,7 @@ public class PaymentManager implements PaymentService {
         return new SuccessDataResult<Rental>(this.rentalService.add(createRentalRequest).getData());
     }
 
-    public DataResult<Invoice> newInvoiceForPayment(CreatePaymentRequest createPaymentRequest, Rental rental, Customer customer) {
+    private DataResult<Invoice> newInvoiceForPayment(CreatePaymentRequest createPaymentRequest, Rental rental, Customer customer) {
         CreateInvoiceRequest createInvoiceRequest = new CreateInvoiceRequest();
         createInvoiceRequest.setBillNo(UUID.randomUUID().toString());
         createInvoiceRequest.setRentalId(rental.getId());
@@ -139,22 +135,22 @@ public class PaymentManager implements PaymentService {
         createInvoiceRequest.setRentDate(createPaymentRequest.getRentDate());
         createInvoiceRequest.setCustomerId(customer.getId());
         createInvoiceRequest.setTotalPricePayment(addTotalPrice(createPaymentRequest));
-        createInvoiceRequest.setRentalDay(diffDates(createPaymentRequest));
+        createInvoiceRequest.setRentalDay(differenceRentDateAndReturnDate(createPaymentRequest));
         return new SuccessDataResult<Invoice>(this.invoiceService.add(createInvoiceRequest).getData());
     }
 
-    public void newPayment(CreatePaymentRequest createPaymentRequest, Payment payment, Customer customer, Rental rental, Invoice invoice) {
-        payment.setDayCount(diffDates(createPaymentRequest));
+    private void newPayment(CreatePaymentRequest createPaymentRequest, Payment payment, Customer customer, Rental rental, Invoice invoice) {
+        payment.setDayCount(differenceRentDateAndReturnDate(createPaymentRequest));
         payment.setCustomer(customer);
-        payment.setRentCity(this.getCity(createPaymentRequest));
+        payment.setRentCity(this.getCityById(createPaymentRequest));
         payment.setTotalPrice(addTotalPrice(createPaymentRequest));
-        payment.setDayCount(diffDates(createPaymentRequest));
+        payment.setDayCount(differenceRentDateAndReturnDate(createPaymentRequest));
         payment.setRental(rental);
         payment.setInvoice(invoice);
         this.paymentDao.save(payment);
     }
 
-    public void makePayment(CreatePaymentRequest createPaymentRequest) {
+    private void makePayment(CreatePaymentRequest createPaymentRequest) {
         CreditCard creditCard = new CreditCard();
         creditCard.setCardNumber(createPaymentRequest.getCardNumber());
         creditCard.setCardFirstName(createPaymentRequest.getCardFirstName());
@@ -167,7 +163,7 @@ public class PaymentManager implements PaymentService {
         }
     }
 
-    public void newOrderedAdditionalProperty(CreatePaymentRequest createPaymentRequest, Rental rental) {
+    private void newOrderedAdditionalProperty(CreatePaymentRequest createPaymentRequest, Rental rental) {
 
         for (int orderedAdditionalItem : createPaymentRequest.getOrderedAdditionalPropertyIdentities()) {
             CreateOrderedAdditionalPropertyRequest createOrderedAdditionalPropertyRequest = new CreateOrderedAdditionalPropertyRequest();
@@ -177,13 +173,13 @@ public class PaymentManager implements PaymentService {
         }
     }
 
-    public City getCity(CreatePaymentRequest createPaymentRequest) {
+    private City getCityById(CreatePaymentRequest createPaymentRequest) {
         CityDto cityDto = this.cityService.getById(createPaymentRequest.getRentCityId()).getData();
         City city = this.modelMapperService.forDto().map(cityDto, City.class);
         return city;
     }
 
-    public double additionalPropertyTotal(CreatePaymentRequest createPaymentRequest) {
+    private double additionalPropertyTotal(CreatePaymentRequest createPaymentRequest) {
         double totalPrice = 0;
         for (int orderedAdditionalItem : createPaymentRequest.getOrderedAdditionalPropertyIdentities()) {
 
@@ -194,12 +190,12 @@ public class PaymentManager implements PaymentService {
     }
 
 
-    public int diffDates(CreatePaymentRequest createPaymentRequest) {
+    private int differenceRentDateAndReturnDate(CreatePaymentRequest createPaymentRequest) {
         long period = ChronoUnit.DAYS.between(createPaymentRequest.getRentDate(), createPaymentRequest.getReturnDate());
         return (int) period;
     }
 
-    public double checkCity(CreatePaymentRequest createPaymentRequest) {
+    private double checkCitySimilarityById(CreatePaymentRequest createPaymentRequest) {
 
         if (createPaymentRequest.getRentCityId() != createPaymentRequest.getReturnCityId()) {
 
@@ -207,8 +203,7 @@ public class PaymentManager implements PaymentService {
         }
         return 0;
     }
-
-    public double updateKilometer(int carId) {
+    private double updateCarKilometer(int carId) {
         CarDto carDto = this.carService.getCarKilometer(carId);
         return carDto.getCarKilometer();
 

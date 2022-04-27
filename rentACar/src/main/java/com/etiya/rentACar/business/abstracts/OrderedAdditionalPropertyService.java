@@ -11,7 +11,9 @@ import java.util.List;
 
 
 public interface OrderedAdditionalPropertyService {
+
     Result add(CreateOrderedAdditionalPropertyRequest createOrderedAdditionalPropertyRequest);
+
     DataResult<List<ListOrderedAdditionalPropertyDto>> getAll();
     DataResult<ListOrderedAdditionalPropertyDto> getById(int id);
     List<ListOrderedAdditionalPropertyDto> getAllIdById(int id);

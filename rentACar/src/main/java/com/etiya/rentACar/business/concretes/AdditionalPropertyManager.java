@@ -1,7 +1,6 @@
 package com.etiya.rentACar.business.concretes;
 
 import com.etiya.rentACar.business.abstracts.AdditionalPropertyService;
-import com.etiya.rentACar.business.abstracts.OrderedAdditionalPropertyService;
 import com.etiya.rentACar.business.constants.messages.BusinessMessages;
 import com.etiya.rentACar.business.requests.additionalPropertyRequests.CreateAdditionalPropertyRequest;
 import com.etiya.rentACar.business.requests.additionalPropertyRequests.DeleteAdditionalPropertyRequest;
@@ -32,15 +31,6 @@ public class AdditionalPropertyManager implements AdditionalPropertyService {
     }
 
     @Override
-    public DataResult<List<ListAdditionalPropertyDto>> getAll() {
-        List<AdditionalProperty> additionalProperties = this.additionalPropertyDao.findAll();
-        List<ListAdditionalPropertyDto> response = additionalProperties.stream().map(additionalProperty -> this.modelMapperService.forDto()
-                        .map(additionalProperty, ListAdditionalPropertyDto.class))
-                .collect(Collectors.toList());
-        return new SuccessDataResult<List<ListAdditionalPropertyDto>>(response);
-    }
-
-    @Override
     public Result add(CreateAdditionalPropertyRequest createAdditionalPropertyRequest) {
         checkIfAdditionalPropertyExists(createAdditionalPropertyRequest.getName());
         AdditionalProperty additionalProperty = this.modelMapperService.forRequest().map(createAdditionalPropertyRequest, AdditionalProperty.class);
@@ -59,6 +49,15 @@ public class AdditionalPropertyManager implements AdditionalPropertyService {
     public Result delete(DeleteAdditionalPropertyRequest deleteAdditionalPropertyRequest) {
         this.additionalPropertyDao.deleteById(deleteAdditionalPropertyRequest.getId());
         return new SuccessResult(BusinessMessages.AdditionalPropertyMessage.ADDITIONAL_PROPERTY_DELETED);
+    }
+
+    @Override
+    public DataResult<List<ListAdditionalPropertyDto>> getAll() {
+        List<AdditionalProperty> additionalProperties = this.additionalPropertyDao.findAll();
+        List<ListAdditionalPropertyDto> response = additionalProperties.stream().map(additionalProperty -> this.modelMapperService.forDto()
+                        .map(additionalProperty, ListAdditionalPropertyDto.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<List<ListAdditionalPropertyDto>>(response);
     }
 
     public DataResult<ListAdditionalPropertyDto> getById(int id){

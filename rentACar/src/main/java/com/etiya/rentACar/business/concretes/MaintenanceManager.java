@@ -1,29 +1,25 @@
 package com.etiya.rentACar.business.concretes;
 
-import com.etiya.rentACar.business.constants.messages.BusinessMessages;
-import com.etiya.rentACar.business.requests.carRequests.UpdateCarStatusRequest;
-import com.etiya.rentACar.business.responses.carResponses.CarDto;
-import com.etiya.rentACar.core.utilities.results.DataResult;
-import com.etiya.rentACar.core.utilities.results.Result;
-import com.etiya.rentACar.core.utilities.results.SuccessDataResult;
-import com.etiya.rentACar.core.utilities.results.SuccessResult;
-import com.etiya.rentACar.entities.CarStates;
-import org.springframework.stereotype.Service;
 import com.etiya.rentACar.business.abstracts.CarService;
 import com.etiya.rentACar.business.abstracts.MaintenanceService;
+import com.etiya.rentACar.business.constants.messages.BusinessMessages;
+import com.etiya.rentACar.business.requests.carRequests.UpdateCarStatusRequest;
 import com.etiya.rentACar.business.requests.maintenanceRequests.CreateMaintenanceRequest;
 import com.etiya.rentACar.business.requests.maintenanceRequests.DeleteMaintenanceRequest;
 import com.etiya.rentACar.business.requests.maintenanceRequests.UpdateMaintenanceRequest;
 import com.etiya.rentACar.business.responses.maintenanceResponses.ListMaintenanceDto;
 import com.etiya.rentACar.core.crossCuttingConcerns.exceptionHandling.BusinessException;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
+import com.etiya.rentACar.core.utilities.results.DataResult;
+import com.etiya.rentACar.core.utilities.results.Result;
+import com.etiya.rentACar.core.utilities.results.SuccessDataResult;
+import com.etiya.rentACar.core.utilities.results.SuccessResult;
 import com.etiya.rentACar.dataAccess.abstracts.MaintenanceDao;
+import com.etiya.rentACar.entities.CarStates;
 import com.etiya.rentACar.entities.Maintenance;
-
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,13 +79,13 @@ public class MaintenanceManager implements MaintenanceService {
     }
 
 
-    public void checkMaintenanceDate(LocalDate returnDate, LocalDate addDate){
+    private void checkMaintenanceDate(LocalDate returnDate, LocalDate addDate){
         if (returnDate.isBefore(addDate)) {
             throw new BusinessException(BusinessMessages.MaintenanceMessages.MAINTENANCE_DATE_NOT_AVAILABLE);
         }
     }
 
-    public void checkCarStatus(LocalDate returnDate,LocalDate addDate, int carId){
+    private void checkCarStatus(LocalDate returnDate,LocalDate addDate, int carId){
         if (!carService.checkIfCarAvailable(carId)) {
             checkMaintenanceDate(returnDate,addDate);
         }

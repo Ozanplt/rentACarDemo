@@ -25,14 +25,10 @@ public class CustomersController {
 
         this.customerService = customerService;
     }
-
-
     @PostMapping("/add")
     public Result add(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) {
         return this.customerService.add(createCustomerRequest);
     }
-
-
     @GetMapping("/getall")
     public DataResult<List<ListCustomerDto>> getAll() {
         return customerService.getAll();

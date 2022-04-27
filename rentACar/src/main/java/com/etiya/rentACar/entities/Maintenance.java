@@ -19,13 +19,13 @@ public class Maintenance {
     @Column(name = "id")
     private int id;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name="returnDate")
+    @Column(name = "returnDate")
     private LocalDate returnDate;
 
-    @Column(name="addDate")
+    @Column(name = "addDate")
     private LocalDate addDate;
 
     @ManyToOne

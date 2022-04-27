@@ -22,41 +22,41 @@ import java.util.Map;
 @RestControllerAdvice
 public class RentACarApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RentACarApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(RentACarApplication.class, args);
+    }
 
-	@Bean // Bean bellekte uygulama çalıştığında injection yapmaya uygun bekletilen instancelar//uygulama çalıştığında ModelMapper instance'ı üretir
-	public ModelMapper getModelMapper(){
-		return new ModelMapper();
-	}
+    @Bean
+    public ModelMapper getModelMapper() {
+        return new ModelMapper();
+    }
 
-	@ExceptionHandler
-	@ResponseStatus(code= HttpStatus.BAD_REQUEST)
-	public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException){
-		Map<String,String> validationErrors = new HashMap<String,String>();
-		for (FieldError fieldError: methodArgumentNotValidException.getBindingResult().getFieldErrors()){
-				validationErrors.put(fieldError.getField(),fieldError.getDefaultMessage());
-		}
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        Map<String, String> validationErrors = new HashMap<String, String>();
+        for (FieldError fieldError : methodArgumentNotValidException.getBindingResult().getFieldErrors()) {
+            validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
 
-		ErrorDataResult<Object> errorDataResult = new ErrorDataResult<Object>(validationErrors,"VALIDATION_ERRORS(S)");
-		return errorDataResult;
-	}
+        ErrorDataResult<Object> errorDataResult = new ErrorDataResult<Object>(validationErrors, "VALIDATION_ERRORS(S)");
+        return errorDataResult;
+    }
 
-	@ExceptionHandler
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	public ErrorDataResult<Object> handleBusinessException(BusinessException businessException) {
-		ErrorDataResult<Object> errorResults = new ErrorDataResult<>(businessException.getMessage(), "Business.Error");
-		return errorResults;
-	}
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ErrorDataResult<Object> handleBusinessException(BusinessException businessException) {
+        ErrorDataResult<Object> errorResults = new ErrorDataResult<>(businessException.getMessage(), "Business.Error");
+        return errorResults;
+    }
 
-	@Bean
-	public IsBankPosManager getIsbankPostManager(){
-		return new IsBankPosManager();
-	}
+    @Bean
+    public IsBankPosManager getIsbankPostManager() {
+        return new IsBankPosManager();
+    }
 
-	@Bean
-	public HalkBankPosManager getHalkBankPosManager(){
-		return new HalkBankPosManager();
-	}
+    @Bean
+    public HalkBankPosManager getHalkBankPosManager() {
+        return new HalkBankPosManager();
+    }
 }

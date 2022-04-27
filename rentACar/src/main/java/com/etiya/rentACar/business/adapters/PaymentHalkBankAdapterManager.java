@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentHalkBankAdapterManager {
-//implements ederek çalıştırabiliriz
 
     private HalkBankPosManager halkBankPosManager;
 

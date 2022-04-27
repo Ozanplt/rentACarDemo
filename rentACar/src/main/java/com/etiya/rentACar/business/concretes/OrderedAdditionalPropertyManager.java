@@ -3,7 +3,6 @@ package com.etiya.rentACar.business.concretes;
 import com.etiya.rentACar.business.abstracts.OrderedAdditionalPropertyService;
 import com.etiya.rentACar.business.constants.messages.BusinessMessages;
 import com.etiya.rentACar.business.requests.orderedAdditionalPropertyRequests.CreateOrderedAdditionalPropertyRequest;
-import com.etiya.rentACar.business.responses.additionalPropertyResponses.ListAdditionalPropertyDto;
 import com.etiya.rentACar.business.responses.orderedAdditionalPropertyResponses.ListOrderedAdditionalPropertyDto;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.core.utilities.results.DataResult;
@@ -11,7 +10,6 @@ import com.etiya.rentACar.core.utilities.results.Result;
 import com.etiya.rentACar.core.utilities.results.SuccessDataResult;
 import com.etiya.rentACar.core.utilities.results.SuccessResult;
 import com.etiya.rentACar.dataAccess.abstracts.OrderedAdditionalPropertyDao;
-import com.etiya.rentACar.entities.AdditionalProperty;
 import com.etiya.rentACar.entities.OrderedAdditionalProperty;
 import org.springframework.stereotype.Service;
 

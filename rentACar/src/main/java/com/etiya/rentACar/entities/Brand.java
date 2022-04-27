@@ -11,16 +11,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="brands")
+@Table(name = "brands")
 public class Brand {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
-	private int id;
 
-	@Column(name="name")
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-	@OneToMany(mappedBy = "brand")
-	private List<Car> cars;
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Car> cars;
 }
